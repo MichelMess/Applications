@@ -1,41 +1,32 @@
-import sys
-# This bit of code opens a file for reading and creates 2 list variables.
-credentials_file = open('user.txt', 'r+')
-username_list = []
-password_list = []  
-admin = "admin"
-# This bit of code reads the lines of the file.
-for line in credentials_file:
-    chop = line.split()
-    cut = line.split(",")
-    username_list.append(cut[0])
-    password_list.append(chop[1:])
-    user_attach = ''.join(username_list)
-    password_attach = ''.join(password_list[0])
-# This bit of code creates a while loop to validate the user login credentials.
-username_login = input("Enter your username: ").lower()
-while username_login != admin:
-    print("Please try again")
-    username_login = input("Enter your username: ").lower()
-
-if username_login == admin:
-        print("Your username is correct: ", username_login)
-else:
-        print("Incorrect username", username_login)
-        sys.exit()
-
-password_login = input("Enter your password: ").lower()
-while password_login != password_attach:
-    print("Please try again")
-    password_login = input("Enter your password: ").lower()
-
-if password_login == password_attach:
-        print("Your password is correct: ", password_login)
-else:
-        print("Incorrect username", password_login)
-        sys.exit()
-
+# This bit of code opens a file for reading and creates a dictionary. 
+credentials_file = open('user.txt', 'r')
+checklist = credentials_file.readlines()
 credentials_file.close()
+user_pass_Dict = {} 
+# This bit of code loops through the file.
+for line in checklist:
+    chop = line.split(",")
+    clear = chop[1].strip().lower()
+    username = chop[0]
+    password = clear
+    user_pass_Dict[username] = password
+# This bit of code validates username and password in the file.
+loop_count = 0
+while(loop_count == 0):
+    username_login = input("Please enter your username:")
+    password_login = input("Please enter your password:")
+
+    if(username_login in user_pass_Dict):
+        if(user_pass_Dict[username_login] == password_login):
+            loop_count = 1
+
+        else:
+            print("Incorrect password. Try again.")
+            loop_count = 0
+
+    else:
+        print("Incorrect username. Try again.")
+        loop_count = 0
 
 while True:
     menu = input('''Select one of the following Options below: 
@@ -57,9 +48,10 @@ e - Exit
         with open('user.txt', 'a') as user_document:
             if new_password == confirmation_password:
                 user_document.write(new_username + " " + new_password)
+                user_document.write("\n") 
             else:
                     print("Incorrect confirmation password: ", confirmation_password)
-            user_document.close()
+        user_document.close()
 
     elif menu == 'a':
         pass
@@ -119,7 +111,8 @@ e - Exit
 
         file.close()
         # This bit of code counts the total number of tasks and the total number of users.
-    if menu == 's':
+
+    elif menu == 's':
         pass
         # This bit of code creates 2 variables lists and opens a file for reading.
         number_of_tasks = []
